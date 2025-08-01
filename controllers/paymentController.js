@@ -1,0 +1,1 @@
+export const processPayment = (req, res) => res.send('Process Payment');
