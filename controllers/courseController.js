@@ -1,9 +1,5 @@
-// controllers/courseController.js
 import Course from '../models/Course.js';
-import "../models/Assignment.js";
-import "../models/Quiz.js";
 
-// Create new course
 export const createCourse = async (req, res) => {
   try {
     const course = await Course.create(req.body);
@@ -13,24 +9,22 @@ export const createCourse = async (req, res) => {
   }
 };
 
-// Get all courses with assignments and quizzes
 export const getCourses = async (req, res) => {
   try {
-    const courses = await Course.find()
-      .populate('assignments')
-      .populate('quizzes');
+    const courses = await Course.find().populate('lessons');
     res.json(courses);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Get a single course
 export const getCourseById = async (req, res) => {
   try {
-    const course = await Course.findById(req.params.id)
-      .populate('assignments')
-      .populate('quizzes');
+    const course = await Course.findById(req.params.id).populate({
+      path: 'lessons',
+      populate: { path: 'topics' }
+    });
+
     if (!course) return res.status(404).json({ message: 'Course not found' });
     res.json(course);
   } catch (err) {
@@ -38,7 +32,6 @@ export const getCourseById = async (req, res) => {
   }
 };
 
-// Update entire course, including embedded lessons
 export const updateCourse = async (req, res) => {
   try {
     const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -49,7 +42,6 @@ export const updateCourse = async (req, res) => {
   }
 };
 
-// Delete a course
 export const deleteCourse = async (req, res) => {
   try {
     const course = await Course.findByIdAndDelete(req.params.id);

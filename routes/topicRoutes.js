@@ -1,0 +1,25 @@
+import express from 'express';
+import {
+  createTopic,
+  getTopicById,
+  updateTopic,
+  deleteTopic
+} from '../controllers/topicController.js';
+import { protect } from '../middleware/authMiddleware.js';
+import { authorizeRoles } from '../middleware/roleMiddleware.js';
+
+const router = express.Router();
+
+// Create a topic under a lesson
+router
+  .route('/lesson/:lessonId')
+  .post(protect, authorizeRoles('admin', 'superadmin'), createTopic);
+
+// Operate on individual topics
+router
+  .route('/:id')
+  .get(getTopicById)
+  .put(protect, authorizeRoles('admin', 'superadmin'), updateTopic)
+  .delete(protect, authorizeRoles('admin', 'superadmin'), deleteTopic);
+
+export default router;

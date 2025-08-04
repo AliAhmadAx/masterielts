@@ -12,6 +12,8 @@ import quizRoutes from './routes/quizRoutes.js';
 import assignmentRoutes from './routes/assignmentRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import lessonRoutes from './routes/lessonRoutes.js';
+import topicRoutes from './routes/topicRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -23,11 +25,13 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
-app.use('/api/courses', courseRoutes);
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/assignments', assignmentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/lessons', lessonRoutes);
+app.use('/api/topics', topicRoutes);
 
 app.use(errorHandler);
 
