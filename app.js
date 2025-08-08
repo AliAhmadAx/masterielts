@@ -14,6 +14,7 @@ import userRoutes from './routes/userRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import lessonRoutes from './routes/lessonRoutes.js';
 import topicRoutes from './routes/topicRoutes.js';
+import discussionRoutes from './routes/discussion.js';
 
 dotenv.config();
 const app = express();
@@ -32,6 +33,7 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/lessons', lessonRoutes);
 app.use('/api/topics', topicRoutes);
+app.use('/api/discussion', discussionRoutes);
 
 app.use(errorHandler);
 
