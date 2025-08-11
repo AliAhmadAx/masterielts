@@ -11,9 +11,9 @@ import { authorizeRoles } from '../middleware/roleMiddleware.js';
 
 const router = express.Router();
 
-// Create a topic under a lesson
+// Create a topic under a course
 router
-  .route('/course/:courseId')
+  .route('/:courseId')
   .get(getAllTopics)
   .post(protect, authorizeRoles('admin', 'superadmin'), createTopic);
 
