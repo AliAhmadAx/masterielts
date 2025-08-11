@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-  getCommentsForTopic,
+  getCommentsForLessons,
   getComment,
   createComment,
   updateComment,
@@ -13,8 +13,8 @@ const router = express.Router();
 // Comments for a specific topic
 // GET and POST => /api/discussions/:courseId/:lessonId/:topicId
 router
-  .route('/:courseId/:lessonId/:topicId')
-  .get(getCommentsForTopic)
+  .route('/:courseId/:topicId/:lessonId')
+  .get(getCommentsForLessons)
   .post(protect, createComment);
 
 // Individual comment routes (by comment ID)

@@ -13,14 +13,14 @@ const discussionSchema = new mongoose.Schema(
       ref: "Course",
       required: true,
     },
-    lesson: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Lesson",
-      required: true,
-    },
     topic: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Topic",
+      required: true,
+    },
+    lesson: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Lesson",
       required: true,
     },
     user: {
