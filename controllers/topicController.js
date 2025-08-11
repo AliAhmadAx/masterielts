@@ -1,17 +1,18 @@
 import Topic from '../models/Topic.js';
-import Lesson from '../models/Lesson.js';
+import Course from '../models/Course.js';
 
 export const createTopic = async (req, res) => {
   try {
-    const { lessonId } = req.params;
-    const topic = await Topic.create({ ...req.body, lesson: lessonId });
 
-    await Lesson.findByIdAndUpdate(lessonId, { $push: { topics: topic._id } });
-
-    res.status(201).json(topic);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+   const { courseId } = req.params;
+      const topic = await Topic.create({ ...req.body, course: courseId });
+  
+      await Course.findByIdAndUpdate(courseId, { $push: { topics: topic._id } });
+  
+      res.status(201).json(topic);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
 };
 
 export const getAllTopics = async (req, res) => {
@@ -49,7 +50,7 @@ export const deleteTopic = async (req, res) => {
     const topic = await Topic.findByIdAndDelete(req.params.id);
     if (!topic) return res.status(404).json({ message: 'Topic not found' });
 
-    await Lesson.findByIdAndUpdate(topic.lesson, { $pull: { topics: topic._id } });
+    await Course.findByIdAndUpdate(topic.course, { $pull: { topics: topic._id } });
 
     res.json({ message: 'Topic deleted' });
   } catch (err) {

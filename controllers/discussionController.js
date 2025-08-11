@@ -1,12 +1,12 @@
-import Discussion from '../models/Discussion.js';
-import Course from '../models/Course.js';
-import Lesson from '../models/Lesson.js';
-import Topic from '../models/Topic.js';
+import Discussion from "../models/Discussion.js";
+import Course from "../models/Course.js";
+import Lesson from "../models/Lesson.js";
+import Topic from "../models/Topic.js";
 
 // @desc    Get all comments for a topic
 // @route   GET /api/discussions/:courseId/:lessonId/:topicId
 // @access  Public
-export const getCommentsForLessons = async (req, res, next) => {
+export const getCommentsForLessons = async (req, res) => {
   const { courseId, lessonId, topicId } = req.params;
 
   try {
@@ -15,8 +15,8 @@ export const getCommentsForLessons = async (req, res, next) => {
       topic: topicId,
       lesson: lessonId,
     })
-      .populate('user', 'name')
-      .sort('-createdAt');
+      .populate("user", "name")
+      .sort("-createdAt");
 
     res.status(200).json({
       success: true,
@@ -24,7 +24,7 @@ export const getCommentsForLessons = async (req, res, next) => {
       data: topLevelComments,
     });
   } catch (err) {
-    next(err);
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -33,10 +33,13 @@ export const getCommentsForLessons = async (req, res, next) => {
 // @access  Public
 export const getComment = async (req, res, next) => {
   try {
-    const comment = await Discussion.findById(req.params.id).populate('user', 'name');
+    const comment = await Discussion.findById(req.params.id).populate(
+      "user",
+      "name"
+    );
 
     if (!comment) {
-      return next(`Comment not found with ID: ${req.params.id}`, 404);
+      return res.status(404).json({ message: "Comment not found" });
     }
 
     res.status(200).json({
@@ -44,14 +47,14 @@ export const getComment = async (req, res, next) => {
       data: comment,
     });
   } catch (err) {
-    next(err);
+    res.status(500).json({ error: err.message });
   }
 };
 
 // @desc    Create a comment on a topic
 // @route   POST /api/discussions/:courseId/:lessonId/:topicId
 // @access  Private
-export const createComment = async (req, res, next) => {
+export const createComment = async (req, res) => {
   const { courseId, topicId, lessonId } = req.params;
   const { comment } = req.body;
 
@@ -61,7 +64,9 @@ export const createComment = async (req, res, next) => {
     const lesson = await Lesson.findById(lessonId);
 
     if (!course || !lesson || !topic) {
-      return next(`Invalid course, lesson, or topic ID`, 400);
+      return res
+        .status(404)
+        .json({ message: `Invalid course, lesson, or topic ID` });
     }
 
     const newComment = await Discussion.create({
@@ -77,23 +82,23 @@ export const createComment = async (req, res, next) => {
       data: newComment,
     });
   } catch (err) {
-    next(err);
+    res.status(500).json({ error: err.message });
   }
 };
 
 // @desc    Update a comment
 // @route   PUT /api/discussions/comment/:id
 // @access  Private
-export const updateComment = async (req, res, next) => {
+export const updateComment = async (req, res) => {
   try {
     let comment = await Discussion.findById(req.params.id);
 
     if (!comment) {
-      return next(`Comment not found with ID: ${req.params.id}`, 404)
+       return res.status(404).json({ message:`Comment not found with ID: ${req.params.id}`});
     }
 
     if (comment.user.toString() !== req.user.id) {
-      return next(`Not authorized to update this comment`, 403)
+       return res.status(404).json({ message:`Not authorized to update this comment`});
     }
 
     comment.comment = req.body.comment || comment.comment;
@@ -104,23 +109,23 @@ export const updateComment = async (req, res, next) => {
       data: comment,
     });
   } catch (err) {
-    next(err);
+    res.status(500).json({ error: err.message });
   }
 };
 
 // @desc    Delete a comment
 // @route   DELETE /api/discussions/comment/:id
 // @access  Private
-export const deleteComment = async (req, res, next) => {
+export const deleteComment = async (req, res) => {
   try {
     const comment = await Discussion.findById(req.params.id);
 
     if (!comment) {
-      return next(`Comment not found with ID: ${req.params.id}`, 404);
+       return res.status(404).json({ message:`Comment not found with ID: ${req.params.id}`});
     }
 
     if (comment.user.toString() !== req.user.id) {
-      return next(`Not authorized to delete this comment`, 403);
+       return res.status(404).json({ message:`Not authorized to delete this comment`});
     }
 
     await comment.deleteOne();
@@ -130,6 +135,6 @@ export const deleteComment = async (req, res, next) => {
       data: {},
     });
   } catch (err) {
-    next(err);
+    res.status(500).json({ error: err.message });
   }
 };
