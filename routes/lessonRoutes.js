@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  getAllLessons,
   createLesson,
   getLessonById,
   updateLesson,
@@ -13,6 +14,7 @@ const router = express.Router();
 // Create a lesson under a course
 router
   .route('/course/:courseId')
+  .get(getAllLessons)
   .post(protect, authorizeRoles('admin', 'superadmin'), createLesson);
 
 // Operate on individual lessons

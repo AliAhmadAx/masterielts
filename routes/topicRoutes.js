@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   createTopic,
+  getAllTopics,
   getTopicById,
   updateTopic,
   deleteTopic
@@ -13,6 +14,7 @@ const router = express.Router();
 // Create a topic under a lesson
 router
   .route('/lesson/:lessonId')
+  .get(getAllTopics)
   .post(protect, authorizeRoles('admin', 'superadmin'), createTopic);
 
 // Operate on individual topics

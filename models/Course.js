@@ -9,7 +9,7 @@ const courseSchema = new mongoose.Schema({
   thumbnail: String, 
   status: { type: String, enum: ['Draft', 'Published', 'Archived'], default: 'Draft' },
   tags: [String],
-  lessons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' }],
+  topics: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Topic' }],
   assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' }],
   quizzes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' }]
 }, { timestamps: true });

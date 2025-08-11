@@ -14,6 +14,15 @@ export const createLesson = async (req, res) => {
   }
 };
 
+export const getAllLessons = async (req, res) => {
+  try {
+    const lessons = await Lesson.find().populate('topic', 'title _id');
+    res.json(lessons);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 export const getLessonById = async (req, res) => {
   try {
     const lesson = await Lesson.findById(req.params.id).populate('topics');

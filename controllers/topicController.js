@@ -14,6 +14,16 @@ export const createTopic = async (req, res) => {
   }
 };
 
+export const getAllTopics = async (req, res) => {
+  try {
+    const topics = await Topic.find().populate('course', 'title _id');
+    res.json(topics);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
 export const getTopicById = async (req, res) => {
   try {
     const topic = await Topic.findById(req.params.id);
