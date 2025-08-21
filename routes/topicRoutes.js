@@ -14,7 +14,6 @@ const router = express.Router();
 // Create a topic under a course
 router
   .route('/:courseId')
-  .get(getAllTopics)
   .post(protect, authorizeRoles('admin', 'superadmin'), createTopic);
 
   router
