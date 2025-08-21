@@ -4,7 +4,7 @@ import Topic from "../models/Topic.js";
 export const createLesson = async (req, res) => {
   try {
     const { topicId } = req.params;
-    const lesson = await Topic.create({ ...req.body, topic: topicId });
+    const lesson = await Lesson.create({ ...req.body, topic: topicId });
 
     await Topic.findByIdAndUpdate(topicId, { $push: { lessons: lesson._id } });
 

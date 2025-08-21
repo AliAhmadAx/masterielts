@@ -17,6 +17,10 @@ router
   .get(getAllTopics)
   .post(protect, authorizeRoles('admin', 'superadmin'), createTopic);
 
+  router
+  .route('/')
+  .get(getAllTopics)
+
 // Operate on individual topics
 router
   .route('/:id')

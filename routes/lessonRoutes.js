@@ -13,9 +13,13 @@ const router = express.Router();
 
 // Create a lesson under a course
 router
-  .route('/topic/:topicId')
+  .route('/:topicId')
   .get(getAllLessons)
   .post(protect, authorizeRoles('admin', 'superadmin'), createLesson);
+
+router
+  .route('/')
+  .get(getAllLessons)
 
 // Operate on individual lessons
 router
